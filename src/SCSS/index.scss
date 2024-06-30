@@ -1,0 +1,53 @@
+.category-nearShop {
+    margin-left: 135px;
+    margin-top: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #175C8E;
+}
+
+.container {
+    text-align: center;
+}
+
+
+.division-line-top {
+    border-top: 2px solid #175C8E;
+    margin: 20px 135px;
+}
+
+
+.division-line-bottom {
+    border-top: 1px solid #175C8E;
+    margin: 20px 135px;
+}
+
+.all {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-image: url('../icon/all_icon.png');
+    background-size : cover;
+    background-position : center;
+    margin: 0px 100px;
+}
+
+.chicken {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-image: url('../icon/chicken_icon.png');
+    background-size : cover;
+    background-position : center;
+    margin: 0px 100px;
+}
+
+.pizza {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-image: url('../icon/pizza_icon.png');
+    background-size : cover;
+    background-position : center;
+    margin: 0px 100px;
+}
