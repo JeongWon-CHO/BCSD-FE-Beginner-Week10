@@ -1,26 +1,24 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { useQuery } from 'react-query';
 import './SCSS/index.scss';
 
+const fetchShops = async () => {
+    const { data } = await axios.get("https://api.stage.koreatech.in/shops");
+    return data?.shops;
+};
+
+const fetchShopData = async () => {
+    const { data } = await axios.get("https://api.stage.koreatech.in/shops/155");
+    return data;
+};
+
 export default function Main() {
+    const navigate = useNavigate();
 
-    const [shops, setShops] = useState();
-    const movePage = useNavigate();
-
-    useEffect(() => {
-        axios.get("https://api.stage.koreatech.in/shops")
-            .then(res => {
-                console.log(res.data);
-                setShops(res.data?.shops);
-            })
-            .catch(err => console.log(err));
-            axios.get("https://api.stage.koreatech.in/shops/155")
-            .then(res => {
-                console.log(res.data);
-            })
-            .catch(err => console.log(err));
-        }, []);
+    const { data: shops, error: shopsError, isLoading: shopsLoading } = useQuery('shops', fetchShops);
+    const { data: anotherData, error: anotherError, isLoading: anotherLoading } = useQuery('anotherData', fetchShopData);
 
     function getToday(){
         var date = new Date();
@@ -33,7 +31,7 @@ export default function Main() {
 
     let todayDate = getToday(); // 오늘 날짜
 
-    function getDayofWeek(todayDate) {
+    function getDayofWeek() {
         let dayOfWeek = new Date().getDay();
 
         if (dayOfWeek === 0) {
@@ -47,7 +45,6 @@ export default function Main() {
         return dayOfWeek;
     }
 
-    
     let todayDay = getDayofWeek(); // 오늘 요일
 
     let allShops = shops && shops.filter(e => e.category_ids[0] === 1);
@@ -55,20 +52,22 @@ export default function Main() {
     let pizzaShops = shops && shops.filter(e => e.category_ids[1] === 3);
 
     function goAll() {
-        movePage('/category/all', { state: { shops: allShops, todayDay } });
+        navigate('/category/all', { state: { shops: allShops, todayDay } });
     }
 
     function goChicken() {
-        movePage('/category/chicken', { state: { shops: chickenShops, todayDay } });
+        navigate('/category/chicken', { state: { shops: chickenShops, todayDay } });
     }
 
     function goPizza() {
-        movePage('/category/pizza', { state: { shops: pizzaShops, todayDay } });
+        navigate('/category/pizza', { state: { shops: pizzaShops, todayDay } });
     }
+
+    if (shopsLoading || anotherLoading) return <div>Loading...</div>;
+    if (shopsError || anotherError) return <div>Error occurred: {shopsError?.message || anotherError?.message}</div>;
 
     return (
         <div>
-
             <div className='category-nearShop'>주변상점</div>
             <div className='division-line-top'></div>
 
@@ -80,5 +79,5 @@ export default function Main() {
 
             <div className='division-line-bottom'></div>
         </div>
-    )
+    );
 }
